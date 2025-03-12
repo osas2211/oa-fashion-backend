@@ -15,14 +15,6 @@ const signUp = async (req: Request, res: Response) => {
   const { fullname, password, email } = req.body
   const otp = generateOTP()
   try {
-    const user_in_db = await userModel.findOne({ email })
-    if (user_in_db) {
-      console.log(user_in_db)
-      res
-        .status(400)
-        .json({ userCreated: false, message: "User Already Exists" })
-      return
-    }
     const generator = new AvatarGenerator()
 
     const encryptedPassword = await bcrypt.hash(password, 10)
