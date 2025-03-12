@@ -1,12 +1,13 @@
 import { v2 as cloudinaryV2 } from "cloudinary"
 import { CloudinaryStorage } from "multer-storage-cloudinary"
+import { env_variables } from "./env_variables"
 
 export const cloudStorage = (folder_name: string) => {
   const cloudinary = cloudinaryV2
   cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET,
+    cloud_name: env_variables.CLOUDINARY_NAME,
+    api_key: env_variables.CLOUDINARY_API_KEY,
+    api_secret: env_variables.CLOUDINARY_API_SECRET,
     secure: true,
   })
 
