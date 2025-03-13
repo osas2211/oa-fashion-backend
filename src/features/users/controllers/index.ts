@@ -108,4 +108,120 @@ const signIn = async (req: Request, res: Response) => {
   }
 }
 
-export { signUp, verifyEmail, signIn }
+/********************************* IN-APP CONTROLS *********************************/
+
+const getUser = async (req: Request, res: Response) => {
+  const userID = req.user.id
+  try {
+    const user = await userModel.findById(userID, [
+      "-password",
+      "-otp",
+      "-token",
+    ])
+    res.status(200).json({ user })
+    return
+  } catch (error: any) {
+    res.status(400).json({ message: error.message })
+    return
+  }
+}
+
+const getUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await userModel.find({}, ["-password", "-otp", "-token"])
+    if (users?.length !== undefined) {
+      res.status(200).json({ users })
+      return
+    }
+    res.status(200).json({ users: users })
+    return
+  } catch (error: any) {
+    res.status(400).json({ message: error.message })
+    return
+  }
+}
+
+const updateProfile = async (req: Request, res: Response) => {
+  const userID = req.user.id
+  const { fullname } = req.body
+  try {
+    const user = await userModel.findByIdAndUpdate(
+      userID,
+      { $set: { fullname } },
+      { new: true }
+    )
+
+    res.status(200).json({ success: true, message: "Profile updated" })
+    return
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error.message })
+    return
+  }
+}
+
+const resetPassword = async (req: Request, res: Response) => {
+  const userID = req.user.id
+  const generatedOTP = generateOTP(6, {
+    digits: true,
+    lowerCaseAlphabets: false,
+    upperCaseAlphabets: false,
+    specialChars: false,
+  })
+  try {
+    const user = await userModel.findByIdAndUpdate(userID, {
+      $set: { otp: generatedOTP },
+    })
+    const htmlBody = `
+      <p style="text-transform: capitalize;">Hello, ${user?.fullname}</p>
+      <p>Your password reset pin is down below.</p>
+      <h2>${generatedOTP}</h2>
+      <p>If you didn't ask to reset your password, you can ignore this email.</p>
+      <div>
+        <p>Best Regards,</p>
+        <p>The O.A Fashion.</p>
+      </div>
+    `
+    await sendEmail(user?.email as string, "Reset Password", htmlBody)
+    res.status(200).json({
+      success: true,
+      message: `Password Reset pin sent to your email ${user?.email}`,
+    })
+    return
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error.message })
+    return
+  }
+}
+
+const verifyPasswordResetPin = async (req: Request, res: Response) => {
+  const userID = req.user?.id
+  const { password, otp } = req.body
+  try {
+    const user = await userModel.findById(userID)
+    const encryptedPassword = await bcrypt.hash(password, 10)
+    if (user && user?.otp === otp) {
+      await user?.updateOne({
+        $set: { password: encryptedPassword, otp: user?.token?.slice(0, 10) },
+      })
+      res.status(200).json({ password_reset: true })
+      return
+    } else {
+      res.status(400).json({ password_reset: false, message: "invalid otp" })
+      return
+    }
+  } catch (error: any) {
+    res.status(400).json({ password_reset: false, message: error.message })
+    return
+  }
+}
+
+export {
+  signUp,
+  verifyEmail,
+  signIn,
+  getUser,
+  getUsers,
+  resetPassword,
+  verifyPasswordResetPin,
+  updateProfile,
+}

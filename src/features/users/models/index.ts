@@ -30,6 +30,11 @@ const userSchema = new Schema({
     type: Boolean,
     default: false,
   },
+  role: {
+    type: String,
+    enum: ["ADMIN", "USER"],
+    default: "USER",
+  },
 })
 
 export const userModel = model("User", userSchema)

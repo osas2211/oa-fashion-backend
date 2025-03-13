@@ -17,7 +17,7 @@ export const emailVerificationTemplate = (link: string, name: string) => {
       </style>
     </head>
     <body>
-      <h4 class="text-center mt-5">Notelify</h4>
+      <h4 class="text-center mt-5">The O.A Fashion</h4>
       <div class="w-75 p-4 m-auto my-5 bg-light">
         <p class="fw-bold" style="text-transform: capitalize;>Hello, ${name}</p>
         <p>Please click the button below to verify your email address.</p>
@@ -37,7 +37,7 @@ export const emailVerificationTemplate = (link: string, name: string) => {
           ">Verify Email Address</a>
         </div>
         <p>If you did not create an account, no further action is required.</p>
-        <div><p class="mb-0">Regards,</p> <p class="mt-0">Notelify.</p></div>
+        <div><p class="mb-0">Regards,</p> <p class="mt-0">The O.A Fashion.</p></div>
         <hr class="my-4">
         <div>
           <p class="small">If you're having trouble clicking the "Verify Email Address" button, copy and paste the URL below into your web browser: <a href="${link}">${link}</a></p>
