@@ -104,18 +104,85 @@ export const getProduct = async (req: Request, res: Response) => {
 export const getProducts = async (req: Request, res: Response) => {
   try {
     const products = await productModel.find()
-    if (!products) {
-      res.status(404).json({ success: false, message: "Products not found" })
-    } else {
-      res.status(200).json({
+    res.status(200).json({
+      success: true,
+      message: "Products fetched successfully",
+      products,
+    })
+    return
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error?.message })
+    return
+  }
+}
+
+export const updateProduct = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    const product = await productModel.findById(id)
+    if (!product) {
+      res.status(404).json({ success: false, message: "Product not found" })
+      return
+    }
+    const body = req.body as createProductPayload
+    const sizes = body?.sizes ? JSON.parse(body.sizes as any) : product?.sizes
+    const colors = body?.colors
+      ? JSON.parse(body.colors as any)
+      : product?.colors
+    const textPayload = {
+      // ...product,
+      ...body,
+      sizes,
+      colors,
+    }
+    let preview_image_url = ""
+    if ((req.files as any).preview_image) {
+      const preview_image = (req.files as any).preview_image[0]
+      if (preview_image) {
+        const upload_preview_image_result = await uploadToCloudinary(
+          preview_image.buffer,
+          "product_images"
+        )
+        preview_image_url = upload_preview_image_result.secure_url
+      }
+    }
+
+    if ((!req.files as any)?.subImages) {
+      const updatedProduct = await product.updateOne({
+        ...textPayload,
+        image: preview_image_url || product.image,
+      })
+
+      res.status(201).json({
         success: true,
-        message: "Products fetched successfully",
-        products,
+        message: "Product updated",
+        product: updatedProduct,
+      })
+    } else {
+      const uploadResults: string[] = []
+      const subImages_files = (req.files as any).subImages
+      if (subImages_files?.length) {
+        for (const file of subImages_files) {
+          const result = await uploadToCloudinary(file.buffer, "product_images")
+          uploadResults.push(result.secure_url)
+        }
+      }
+
+      const updatedProduct = await product.updateOne({
+        ...textPayload,
+        image: preview_image_url || product.image,
+        subImages: uploadResults || product.subImages,
+      })
+
+      res.status(201).json({
+        success: true,
+        message: "Product updated",
+        product: updatedProduct,
       })
     }
     return
   } catch (error: any) {
-    res.status(400).json({ success: false, message: error?.message })
+    res.status(400).json({ success: false, message: error.message })
     return
   }
 }

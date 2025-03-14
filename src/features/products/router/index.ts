@@ -14,6 +14,7 @@ import {
   deleteProduct,
   getProduct,
   getProducts,
+  updateProduct,
 } from "../controllers/product"
 export const productRouter = Router()
 export const categoryRouter = Router()
@@ -31,6 +32,16 @@ productRouter.post(
 )
 productRouter.get("/:id", getProduct)
 productRouter.get("/", getProducts)
+productRouter.put(
+  "/:id",
+  auth,
+  forAdmin,
+  upload.fields([
+    { name: "preview_image", maxCount: 1 },
+    { name: "subImages", maxCount: 10 },
+  ]),
+  updateProduct
+)
 productRouter.delete("/:id", auth, forAdmin, deleteProduct)
 
 // CATEGORY ROUTES
