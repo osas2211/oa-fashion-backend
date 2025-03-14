@@ -152,6 +152,7 @@ export const updateProduct = async (req: Request, res: Response) => {
         ...textPayload,
         image: preview_image_url || product.image,
       })
+      await updatedProduct.save()
 
       res.status(201).json({
         success: true,
@@ -173,6 +174,7 @@ export const updateProduct = async (req: Request, res: Response) => {
         image: preview_image_url || product.image,
         subImages: uploadResults || product.subImages,
       })
+      await updatedProduct.save()
 
       res.status(201).json({
         success: true,
