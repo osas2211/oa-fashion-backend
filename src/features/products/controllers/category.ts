@@ -1,19 +1,26 @@
 import { Request, Response } from "express"
 import { categoryModel } from "../model/category"
+import { uploadToCloudinary } from "../../../utils/uploadToCloudinary"
 
 export const createCategory = async (req: Request, res: Response) => {
   try {
-    const { title, preview_image } = req.body as {
+    const { title } = req.body as {
       title: string
-      preview_image?: File
     }
-    if (!preview_image) {
+    if (!req.file) {
       const category = await categoryModel.create({ title })
       res
         .status(201)
         .json({ success: true, message: "Category created", category })
     } else {
-      const category = await categoryModel.create({ title })
+      const upload_result = await uploadToCloudinary(
+        req.file.buffer,
+        "product_category_uploads"
+      )
+      const category = await categoryModel.create({
+        title,
+        preview_image: upload_result.url,
+      })
       res
         .status(201)
         .json({ success: true, message: "Category created", category })

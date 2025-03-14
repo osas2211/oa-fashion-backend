@@ -9,3 +9,14 @@ export type ProductType = {
   about: string
   categoryId: string
 }
+
+export type createProductPayload = {
+  title: string
+  price: number
+  image: File
+  subImages?: File[]
+  sizes: string[]
+  colors?: string[]
+  about?: string
+  categoryId: string
+}
