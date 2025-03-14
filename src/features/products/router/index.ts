@@ -9,7 +9,12 @@ import {
 import { auth } from "../../../middleware/auth"
 import { forAdmin } from "../../../middleware/forAdmin"
 import upload from "../../../middleware/multer"
-import { createProduct } from "../controllers/product"
+import {
+  createProduct,
+  deleteProduct,
+  getProduct,
+  getProducts,
+} from "../controllers/product"
 export const productRouter = Router()
 export const categoryRouter = Router()
 
@@ -24,6 +29,9 @@ productRouter.post(
   ]),
   createProduct
 )
+productRouter.get("/:id", getProduct)
+productRouter.get("/", getProducts)
+productRouter.delete("/:id", auth, forAdmin, deleteProduct)
 
 // CATEGORY ROUTES
 categoryRouter.post("/", auth, forAdmin, upload.single("image"), createCategory)

@@ -81,3 +81,61 @@ export const createProduct = async (req: Request, res: Response) => {
     return
   }
 }
+
+export const getProduct = async (req: Request, res: Response) => {
+  const { id } = req.params
+  try {
+    const product = await productModel.findById(id)
+    if (!product) {
+      res.status(404).json({ success: false, message: "Product not found" })
+    } else {
+      res.status(200).json({
+        success: true,
+        message: "Product fetched successfully",
+        product,
+      })
+    }
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error.message })
+    return
+  }
+}
+
+export const getProducts = async (req: Request, res: Response) => {
+  try {
+    const products = await productModel.find()
+    if (!products) {
+      res.status(404).json({ success: false, message: "Products not found" })
+    } else {
+      res.status(200).json({
+        success: true,
+        message: "Products fetched successfully",
+        products,
+      })
+    }
+    return
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error?.message })
+    return
+  }
+}
+
+export const deleteProduct = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params
+    const product = await productModel.findById(id)
+    if (!product) {
+      res.status(404).json({ success: false, message: "Product not found" })
+    } else {
+      await product.deleteOne()
+      res.status(200).json({
+        success: true,
+        message: "Product deleted successfully",
+      })
+    }
+    return
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error?.message })
+    return
+  }
+}
