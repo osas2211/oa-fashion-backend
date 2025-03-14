@@ -19,7 +19,7 @@ export const createCategory = async (req: Request, res: Response) => {
       )
       const category = await categoryModel.create({
         title,
-        preview_image: upload_result.url,
+        preview_image: upload_result.secure_url,
       })
       res
         .status(201)
