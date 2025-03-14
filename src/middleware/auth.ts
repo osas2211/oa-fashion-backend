@@ -6,7 +6,10 @@ import { userModel } from "../features/users/models"
 // Extend the Request interface to include the user property
 declare module "express-serve-static-core" {
   interface Request {
-    user?: any
+    user: {
+      fullname: string
+      id: string
+    }
   }
 }
 
