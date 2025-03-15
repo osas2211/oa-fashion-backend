@@ -3,7 +3,7 @@ import { Schema, model } from "mongoose"
 const collectionSchema = new Schema({
   title: {
     type: String,
-    unique: [true, "Title already exists"],
+    unique: true,
     required: [true, "Collection title is required"],
   },
   preview_image: {
@@ -14,11 +14,16 @@ const collectionSchema = new Schema({
     {
       type: Schema.Types.ObjectId,
       ref: "Product",
-      unique: [true, "Already added to collection"],
       index: true,
-      sparse: true,
     },
   ],
+})
+
+// Pre-save hook to ensure unique products within the array
+collectionSchema.pre("save", function (next) {
+  // @ts-ignore
+  this.products = [...new Set(this.products.map((p) => p.toString()))]
+  next()
 })
 
 export const collectionModel = model("Collection", collectionSchema)

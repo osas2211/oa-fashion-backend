@@ -4,11 +4,17 @@ import { uploadToCloudinary } from "../../../utils/uploadToCloudinary"
 
 export const createCollection = async (req: Request, res: Response) => {
   try {
-    const { title } = req.body as {
+    const { title, products } = req.body as {
       title: string
+      products?: String[]
     }
+    const parsed_products =
+      Number(products?.length || 0) > 0 ? JSON.parse(products as any) : []
     if (!req.file) {
-      const collection = await collectionModel.create({ title })
+      const collection = await collectionModel.create({
+        title,
+        products: parsed_products,
+      })
       res
         .status(201)
         .json({ success: true, message: "Collection created", collection })
@@ -20,6 +26,7 @@ export const createCollection = async (req: Request, res: Response) => {
       const collection = await collectionModel.create({
         title,
         preview_image: upload_result.secure_url,
+        products: parsed_products,
       })
       res
         .status(201)
