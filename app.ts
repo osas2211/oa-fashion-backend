@@ -8,6 +8,7 @@ import { userRouter } from "./src/features/users/routes"
 import {
   cartRouter,
   categoryRouter,
+  orderRouter,
   productRouter,
 } from "./src/features/products/router"
 
@@ -20,6 +21,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use("/api/v1", userRouter)
 app.use("/api/v1/product", productRouter)
 app.use("/api/v1/cart", cartRouter)
+app.use("/api/v1/order", orderRouter)
 app.use("/api/v1/category", categoryRouter)
 
 app.get("/", (req, res) => {

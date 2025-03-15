@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose"
 
-const cartSchema = new Schema({
+const orderSchema = new Schema({
   products: [
     {
       product: {
@@ -19,6 +19,11 @@ const cartSchema = new Schema({
     ref: "User",
     required: [true, "User Reference is required"],
   },
+  status: {
+    type: String,
+    enum: ["PENDING", "CANCELLED", "COMPLETE"],
+    default: "PENDING",
+  },
 })
 
-export const cartModel = model("Cart", cartSchema)
+export const orderModel = model("Order", orderSchema)
