@@ -7,6 +7,7 @@ import { generateOTP } from "../../../utils/generate-otp"
 import { emailVerificationTemplate } from "../../../utils/verify_email_template"
 import { sendEmail } from "../../../utils/sendMail"
 import { env_variables } from "../../../utils/env_variables"
+import { cartModel } from "../../products/model/cart"
 
 /********************************* AUTHENTICATION CONTROLS *********************************/
 
@@ -36,6 +37,9 @@ const signUp = async (req: Request, res: Response) => {
       fullname
     )
     await sendEmail(email, "Verify Email Address", htmlBody)
+
+    // Create Cart for User
+    await cartModel.create({ user: user.id })
     res.status(201).json({ userCreated: true, user })
     return
   } catch (err: any) {

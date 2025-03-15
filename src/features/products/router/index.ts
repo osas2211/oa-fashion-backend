@@ -16,7 +16,9 @@ import {
   getProducts,
   updateProduct,
 } from "../controllers/product"
+import { addToCart, getUserCart, removeFromCart } from "../controllers/cart"
 export const productRouter = Router()
+export const cartRouter = Router()
 export const categoryRouter = Router()
 
 // PRODUCT ROUTES
@@ -43,6 +45,11 @@ productRouter.put(
   updateProduct
 )
 productRouter.delete("/:id", auth, forAdmin, deleteProduct)
+
+// CART
+cartRouter.get("/", auth, getUserCart)
+cartRouter.put("/add", auth, addToCart)
+cartRouter.delete("/remove", auth, removeFromCart)
 
 // CATEGORY ROUTES
 categoryRouter.post("/", auth, forAdmin, upload.single("image"), createCategory)

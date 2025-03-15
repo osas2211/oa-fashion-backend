@@ -95,6 +95,7 @@ export const getProduct = async (req: Request, res: Response) => {
         product,
       })
     }
+    return
   } catch (error: any) {
     res.status(400).json({ success: false, message: error.message })
     return

@@ -5,7 +5,11 @@ import { env_variables } from "./src/utils/env_variables"
 import http from "http"
 import { connectDB } from "./src/db/db"
 import { userRouter } from "./src/features/users/routes"
-import { categoryRouter, productRouter } from "./src/features/products/router"
+import {
+  cartRouter,
+  categoryRouter,
+  productRouter,
+} from "./src/features/products/router"
 
 dotenv.config()
 
@@ -15,6 +19,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use("/api/v1", userRouter)
 app.use("/api/v1/product", productRouter)
+app.use("/api/v1/cart", cartRouter)
 app.use("/api/v1/category", categoryRouter)
 
 app.get("/", (req, res) => {
