@@ -66,7 +66,9 @@ export const removeFromCart = async (req: Request, res: Response) => {
 export const getUserCart = async (req: Request, res: Response) => {
   const { id } = req.user
   try {
-    const cart = await cartModel.findOne({ user: id })
+    const cart = await cartModel
+      .findOne({ user: id })
+      .populate("products.product")
     if (!cart) {
       res.status(404).json({ success: false, message: "Cart does not exists" })
     } else {
