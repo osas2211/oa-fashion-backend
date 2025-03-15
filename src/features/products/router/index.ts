@@ -23,10 +23,18 @@ import {
   getUserOrders,
   updateOrderStatus,
 } from "../controllers/order"
+import {
+  createCollection,
+  deleteCollection,
+  getCollection,
+  getCollections,
+  updateCollection,
+} from "../controllers/collection"
 export const productRouter = Router()
 export const cartRouter = Router()
 export const orderRouter = Router()
 export const categoryRouter = Router()
+export const collectionRouter = Router()
 
 // PRODUCT ROUTES
 productRouter.post(
@@ -70,3 +78,16 @@ categoryRouter.put("/:id", auth, forAdmin, updateCategory)
 categoryRouter.delete("/:id", auth, forAdmin, deleteCategory)
 categoryRouter.get("/:title", getCategory)
 categoryRouter.get("/", getCategories)
+
+// COLLECTION ROUTES
+collectionRouter.post(
+  "/",
+  auth,
+  forAdmin,
+  upload.single("image"),
+  createCollection
+)
+collectionRouter.put("/:id", auth, forAdmin, updateCollection)
+collectionRouter.delete("/:id", auth, forAdmin, deleteCollection)
+collectionRouter.get("/:title", getCollection)
+collectionRouter.get("/", getCollections)

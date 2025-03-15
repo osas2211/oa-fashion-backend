@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express"
+import express from "express"
 import cors from "cors"
 import dotenv from "dotenv"
 import { env_variables } from "./src/utils/env_variables"
@@ -8,6 +8,7 @@ import { userRouter } from "./src/features/users/routes"
 import {
   cartRouter,
   categoryRouter,
+  collectionRouter,
   orderRouter,
   productRouter,
 } from "./src/features/products/router"
@@ -23,8 +24,9 @@ app.use("/api/v1/product", productRouter)
 app.use("/api/v1/cart", cartRouter)
 app.use("/api/v1/order", orderRouter)
 app.use("/api/v1/category", categoryRouter)
+app.use("/api/v1/collection", collectionRouter)
 
-app.get("/", (req, res) => {
+app.get("/", (_, res) => {
   res
     .status(200)
     .json({ connected: true, message: "WELCOME TO THE O.A FASHION" })

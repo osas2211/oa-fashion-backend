@@ -8,6 +8,7 @@ const categorySchema = new Schema({
   },
   preview_image: {
     type: String,
+    required: [true, "Category preview_image is required"],
   },
   products: [
     {
