@@ -8,6 +8,13 @@ export const createCollection = async (req: Request, res: Response) => {
       title: string
       products?: String[]
     }
+    const _collection = await collectionModel.findOne({ title })
+    if (_collection) {
+      res
+        .status(400)
+        .json({ success: false, message: "Collection already exists" })
+      return
+    }
     const parsed_products =
       Number(products?.length || 0) > 0 ? JSON.parse(products as any) : []
     if (!req.file) {

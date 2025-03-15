@@ -3,7 +3,7 @@ import { Schema, model } from "mongoose"
 const collectionSchema = new Schema({
   title: {
     type: String,
-    unique: true,
+    unique: [true, "Collection already exists"],
     required: [true, "Collection title is required"],
   },
   preview_image: {
