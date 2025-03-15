@@ -17,7 +17,12 @@ import {
   updateProduct,
 } from "../controllers/product"
 import { addToCart, getUserCart, removeFromCart } from "../controllers/cart"
-import { createOrder } from "../controllers/order"
+import {
+  createOrder,
+  getAllOrders,
+  getUserOrders,
+  updateOrderStatus,
+} from "../controllers/order"
 export const productRouter = Router()
 export const cartRouter = Router()
 export const orderRouter = Router()
@@ -55,6 +60,9 @@ cartRouter.delete("/remove", auth, removeFromCart)
 
 // ORDER ROUTES
 orderRouter.post("/", auth, createOrder)
+orderRouter.patch("/:id", auth, updateOrderStatus)
+orderRouter.get("/", auth, getUserOrders)
+orderRouter.get("/all", auth, forAdmin, getAllOrders)
 
 // CATEGORY ROUTES
 categoryRouter.post("/", auth, forAdmin, upload.single("image"), createCategory)
