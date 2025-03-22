@@ -112,6 +112,22 @@ export const batchAddProducts = async (req: Request, res: Response) => {
     })
 
     const created_products = await productModel.create(products)
+    created_products.forEach(async (product) => {
+      const category = await categoryModel.findById(
+        product.categoryId.toString()
+      )
+      if (category) {
+        await category.updateOne(
+          {
+            $push: {
+              products: product,
+            },
+          },
+
+          { new: true }
+        )
+      }
+    })
     res.status(201).json({
       success: true,
       message: "Products created",
