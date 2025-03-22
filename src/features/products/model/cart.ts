@@ -12,6 +12,12 @@ const cartSchema = new Schema({
         type: Number,
         default: 1,
       },
+      size: {
+        type: String,
+      },
+      color: {
+        type: Number,
+      },
     },
   ],
   user: {
