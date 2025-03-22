@@ -10,6 +10,7 @@ import { auth } from "../../../middleware/auth"
 import { forAdmin } from "../../../middleware/forAdmin"
 import upload from "../../../middleware/multer"
 import {
+  batchAddProducts,
   createProduct,
   deleteProduct,
   getProduct,
@@ -47,6 +48,7 @@ productRouter.post(
   ]),
   createProduct
 )
+productRouter.post("/batch-add-products", auth, forAdmin, batchAddProducts)
 productRouter.get("/:id", getProduct)
 productRouter.get("/", getProducts)
 productRouter.put(

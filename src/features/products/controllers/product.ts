@@ -1,6 +1,9 @@
 import { Request, Response } from "express"
 import { productModel } from "../model/product"
-import { createProductPayload } from "../../../../@types/productType"
+import {
+  batchProductType,
+  createProductPayload,
+} from "../../../../@types/productType"
 import { uploadToCloudinary } from "../../../utils/uploadToCloudinary"
 import { categoryModel } from "../model/category"
 
@@ -76,6 +79,44 @@ export const createProduct = async (req: Request, res: Response) => {
         .json({ success: true, message: "Product created", product })
     }
     return
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error.message })
+    return
+  }
+}
+
+export const batchAddProducts = async (req: Request, res: Response) => {
+  try {
+    const products = req.body as batchProductType[]
+    const textPayload = products.map((product) => {
+      const { title, price, sizes, colors, about, categoryId } = product
+      return {
+        title,
+        price,
+        sizes: sizes as any,
+        colors: colors as any,
+        about,
+        categoryId,
+      }
+    })
+
+    products.forEach(async (product) => {
+      const category = await categoryModel.findById(product.categoryId)
+      if (!category) {
+        res.status(404).json({
+          success: false,
+          message: `Category: ${product.categoryId} not found`,
+        })
+        return
+      }
+    })
+
+    const created_products = await productModel.create(products)
+    res.status(201).json({
+      success: true,
+      message: "Products created",
+      products: created_products,
+    })
   } catch (error: any) {
     res.status(400).json({ success: false, message: error.message })
     return

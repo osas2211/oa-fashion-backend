@@ -20,3 +20,14 @@ export type createProductPayload = {
   about?: string
   categoryId: string
 }
+
+export type batchProductType = {
+  title: string
+  price: number
+  image: string
+  subImages?: string[]
+  sizes: string[]
+  colors?: string[]
+  about?: string
+  categoryId: string
+}

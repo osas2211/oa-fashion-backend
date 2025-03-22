@@ -17,6 +17,7 @@ const categorySchema = new Schema({
       unique: [true, "Already added to category"],
       index: true,
       sparse: true,
+      default: [],
     },
   ],
 })
