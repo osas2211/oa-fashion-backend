@@ -11,7 +11,7 @@ backend:
     path: .
     scripts:
         deploy:
-            - npm install
+            - npm install --force
             - npm run build
         local:
             - npm install
