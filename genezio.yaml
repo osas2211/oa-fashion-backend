@@ -12,7 +12,7 @@ backend:
     scripts:
         deploy:
             - npm install --force
-            - npm run build
+            # - npm run build
         local:
             - npm install
             - npm run build
