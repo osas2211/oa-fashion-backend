@@ -36,6 +36,6 @@
     "streamifier": "^0.1.1"
   },
   "scripts": {
-    "start": "nodemon app.ts"
+    "start": "nodemon ./ts/app.ts"
   }
 }

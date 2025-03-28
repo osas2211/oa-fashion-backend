@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.userRouter = void 0;
+const express_1 = require("express");
+const controllers_1 = require("../controllers");
+const auth_1 = require("../../../middleware/auth");
+const forAdmin_1 = require("../../../middleware/forAdmin");
+exports.userRouter = (0, express_1.Router)();
+exports.userRouter.post("/signup", controllers_1.signUp);
+exports.userRouter.post("/verify-email", controllers_1.verifyEmail);
+exports.userRouter.post("/login", controllers_1.signIn);
+exports.userRouter.patch("/update-profile", auth_1.auth, controllers_1.updateProfile);
+exports.userRouter.put("/reset-password", auth_1.auth, controllers_1.resetPassword);
+exports.userRouter.put("/reset-password/confirm", auth_1.auth, controllers_1.verifyPasswordResetPin);
+exports.userRouter.get("/user", auth_1.auth, controllers_1.getUser);
+exports.userRouter.get("/users", auth_1.auth, forAdmin_1.forAdmin, controllers_1.getUsers);
